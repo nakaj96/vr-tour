@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>360度VR観光システム</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- A-Frameライブラリ -->
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+
+  <!-- Google Maps JavaScript API -->
+  <script src="https://maps.googleapis.com/maps/api/js?key="></script>
+
+  <style>
+    #map, #pano {
+      width: 100%;
+      height: 400px;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>360度VR観光システム</h1>
+
+    <!-- ストリートビュー表示エリア -->
+    <div id="map"></div>
+    <div id="pano"></div>
+
+    <!-- A-Frameによる360度画像表示 -->
+    <a-scene embedded>
+      <a-assets>
+        <!-- 任意の360度パノラマ画像に差し替え -->
+        <img id="panorama" src="panorama.jpg">
+      </a-assets>
+      <a-sky src="#panorama" rotation="0 -130 0"></a-sky>
+    </a-scene>
+  </div>
+
+  <script>
+    function initialize() {
+      const location = { lat: 38.3086, lng: 141.0811 }; // 七ヶ浜町の例
+
+      const map = new google.maps.Map(document.getElementById("map"), {
+        center: location,
+        zoom: 14,
+      });
+
+      const panorama = new google.maps.StreetViewPanorama(
+        document.getElementById("pano"), {
+          position: location,
+          pov: { heading: 165, pitch: 0 },
+          zoom: 1
+        });
+
+      map.setStreetView(panorama);
+    }
+
+    window.onload = initialize;
+  </script>
+</body>
+</html>
